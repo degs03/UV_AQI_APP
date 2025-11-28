@@ -557,25 +557,6 @@ npm install
 
 1. Verificar que el Client ID sea correcto
 2. Verificar URIs de redirección en Google Console
-3. Para Android: agregar SHA-1 fingerprint en Google Console
-
-## 📄 Licencia
-
-MIT
-
-## 👥 Contribuir
-
-Las contribuciones son bienvenidas. Por favor:
-
-1. Fork el proyecto
-2. Crea una rama para tu feature
-3. Commit tus cambios
-4. Push a la rama
-5. Abre un Pull Request
-
-## 📞 Soporte
-
-Para reportar problemas o sugerencias, crear un issue en GitHub.
 
 ---
 
