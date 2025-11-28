@@ -1,0 +1,322 @@
+# COLECCIÓN DE PETICIONES HTTP PARA PROBAR LA API
+
+## Variables
+@baseUrl = http://localhost:3000/api
+@token = TU_TOKEN_AQUI
+
+## ============================================
+## AUTENTICACIÓN
+## ============================================
+
+### Registrar usuario
+POST {{baseUrl}}/auth/register
+Content-Type: application/json
+
+{
+  "email": "test@example.com",
+  "password": "password123",
+  "name": "Usuario de Prueba"
+}
+
+### Login con email/password
+POST {{baseUrl}}/auth/login
+Content-Type: application/json
+
+{
+  "email": "admin@encarnacion.com",
+  "password": "admin123"
+}
+
+### Login con Google (requiere token de Google)
+POST {{baseUrl}}/auth/google
+Content-Type: application/json
+
+{
+  "idToken": "GOOGLE_ID_TOKEN_AQUI"
+}
+
+### Obtener usuario actual
+GET {{baseUrl}}/auth/me
+Authorization: Bearer {{token}}
+
+### Actualizar push token
+POST {{baseUrl}}/auth/push-token
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "pushToken": "ExponentPushToken[xxxxxxxxxxxxxxxxxxxxxx]"
+}
+
+## ============================================
+## DATOS ACTUALES Y MAPA
+## ============================================
+
+### Obtener datos actuales (público)
+GET {{baseUrl}}/data/current
+
+### Obtener datos para mapa (público)
+GET {{baseUrl}}/data/map
+
+### Obtener histórico (requiere autenticación)
+GET {{baseUrl}}/data/history?from=2024-01-01T00:00:00Z&to=2024-01-31T23:59:59Z
+Authorization: Bearer {{token}}
+
+### Obtener histórico de un sensor específico
+GET {{baseUrl}}/data/history/1?from=2024-01-01T00:00:00Z&to=2024-01-31T23:59:59Z
+Authorization: Bearer {{token}}
+
+### Obtener estadísticas
+GET {{baseUrl}}/data/statistics?from=2024-01-01T00:00:00Z&to=2024-01-31T23:59:59Z
+Authorization: Bearer {{token}}
+
+### Obtener estadísticas de un sensor
+GET {{baseUrl}}/data/statistics?from=2024-01-01T00:00:00Z&to=2024-01-31T23:59:59Z&sensorId=1
+Authorization: Bearer {{token}}
+
+## ============================================
+## SENSORES
+## ============================================
+
+### Enviar datos desde sensor ESP32 (requiere API key)
+POST {{baseUrl}}/sensors/data
+Content-Type: application/json
+
+{
+  "apiKey": "sensor_key_plaza_armas_001",
+  "uvIndex": 7.5,
+  "aqi": 85,
+  "pm25": 25.3,
+  "pm10": 42.1,
+  "temperature": 28.5,
+  "humidity": 65.2,
+  "timestamp": "2024-01-15T14:30:00Z"
+}
+
+### Listar todos los sensores
+GET {{baseUrl}}/sensors
+Authorization: Bearer {{token}}
+
+### Crear sensor (admin)
+POST {{baseUrl}}/sensors
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Sensor Test",
+  "type": "MULTI",
+  "location": "Ubicación de prueba",
+  "latitude": -27.330,
+  "longitude": -55.867,
+  "description": "Sensor de prueba"
+}
+
+### Actualizar sensor (admin)
+PUT {{baseUrl}}/sensors/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Sensor Actualizado",
+  "isActive": true
+}
+
+### Eliminar sensor (admin)
+DELETE {{baseUrl}}/sensors/1
+Authorization: Bearer {{token}}
+
+## ============================================
+## UMBRALES
+## ============================================
+
+### Obtener umbrales del usuario
+GET {{baseUrl}}/thresholds/user
+Authorization: Bearer {{token}}
+
+### Configurar umbral UV del usuario
+POST {{baseUrl}}/thresholds/user
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "type": "UV",
+  "value": 6,
+  "notificationEnabled": true
+}
+
+### Configurar umbral AQI del usuario
+POST {{baseUrl}}/thresholds/user
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "type": "AQI",
+  "value": 100,
+  "notificationEnabled": true
+}
+
+### Eliminar umbral del usuario
+DELETE {{baseUrl}}/thresholds/user/1
+Authorization: Bearer {{token}}
+
+### Obtener umbrales globales (público)
+GET {{baseUrl}}/thresholds/global
+
+### Crear umbral global (admin)
+POST {{baseUrl}}/thresholds/global
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "type": "UV",
+  "level": "critical",
+  "minValue": 8,
+  "maxValue": null,
+  "color": "#F44336",
+  "message": "Radiación UV muy alta. Evite exposición prolongada."
+}
+
+### Eliminar umbral global (admin)
+DELETE {{baseUrl}}/thresholds/global/1
+Authorization: Bearer {{token}}
+
+## ============================================
+## ADMINISTRACIÓN
+## ============================================
+
+### Obtener todos los usuarios (admin)
+GET {{baseUrl}}/admin/users
+Authorization: Bearer {{token}}
+
+### Crear usuario (admin)
+POST {{baseUrl}}/admin/users
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "email": "newuser@example.com",
+  "password": "password123",
+  "name": "Nuevo Usuario",
+  "role": "user"
+}
+
+### Actualizar usuario (admin)
+PUT {{baseUrl}}/admin/users/2
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "name": "Usuario Actualizado",
+  "role": "admin",
+  "isActive": true
+}
+
+### Eliminar usuario (admin)
+DELETE {{baseUrl}}/admin/users/2
+Authorization: Bearer {{token}}
+
+### Obtener logs del sistema (admin)
+GET {{baseUrl}}/admin/logs?limit=50
+Authorization: Bearer {{token}}
+
+### Obtener logs filtrados (admin)
+GET {{baseUrl}}/admin/logs?limit=50&level=error&action=LOGIN
+Authorization: Bearer {{token}}
+
+### Obtener estadísticas del dashboard (admin)
+GET {{baseUrl}}/admin/stats
+Authorization: Bearer {{token}}
+
+## ============================================
+## HEALTH CHECK
+## ============================================
+
+### Verificar estado del servidor
+GET http://localhost:3000/health
+
+### Verificar API raíz
+GET http://localhost:3000/
+
+## ============================================
+## EJEMPLOS CON CURL (PowerShell)
+## ============================================
+
+# Login
+curl -X POST http://localhost:3000/api/auth/login `
+  -H "Content-Type: application/json" `
+  -d '{\"email\":\"admin@encarnacion.com\",\"password\":\"admin123\"}'
+
+# Obtener datos actuales
+curl http://localhost:3000/api/data/current
+
+# Enviar datos desde sensor
+curl -X POST http://localhost:3000/api/sensors/data `
+  -H "Content-Type: application/json" `
+  -d '{\"apiKey\":\"sensor_key_plaza_armas_001\",\"uvIndex\":7.5,\"aqi\":85,\"temperature\":28.5,\"humidity\":65.2}'
+
+# Obtener datos con autorización
+$token = "TU_TOKEN_AQUI"
+curl http://localhost:3000/api/data/history?from=2024-01-01T00:00:00Z&to=2024-01-31T23:59:59Z `
+  -H "Authorization: Bearer $token"
+
+## ============================================
+## RESPUESTAS ESPERADAS
+## ============================================
+
+### Login exitoso (200)
+{
+  "message": "Login exitoso",
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...",
+  "user": {
+    "id": 1,
+    "email": "admin@encarnacion.com",
+    "name": "Administrador",
+    "role": "admin"
+  }
+}
+
+### Datos actuales (200)
+{
+  "data": [
+    {
+      "sensorId": 1,
+      "sensorName": "Sensor Centro - Plaza de Armas",
+      "location": "Plaza de Armas, Encarnación",
+      "latitude": -27.330,
+      "longitude": -55.867,
+      "uvIndex": 7.5,
+      "uvClassification": {
+        "level": "Alto",
+        "color": "#FF9800"
+      },
+      "aqi": 85,
+      "aqiClassification": {
+        "level": "Moderado",
+        "color": "#FFC107"
+      },
+      "temperature": 28.5,
+      "humidity": 65.2,
+      "timestamp": "2024-01-15T14:30:00.000Z"
+    }
+  ]
+}
+
+### Error de autenticación (401)
+{
+  "error": "Token inválido"
+}
+
+### Error de permisos (403)
+{
+  "error": "Acceso denegado. Se requieren permisos de administrador."
+}
+
+### Error de validación (400)
+{
+  "error": "Todos los campos son requeridos"
+}
+
+### Error del servidor (500)
+{
+  "error": "Error interno del servidor"
+}

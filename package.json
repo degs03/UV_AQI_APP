@@ -1,0 +1,30 @@
+{
+  "name": "aqi-uv-monitor-system",
+  "version": "1.0.0",
+  "description": "Sistema completo de monitoreo de radiación UV y calidad del aire para Encarnación",
+  "scripts": {
+    "install:all": "npm run install:backend && npm run install:mobile",
+    "install:backend": "cd backend && npm install",
+    "install:mobile": "cd mobile && npm install",
+    "backend": "cd backend && npm run dev",
+    "mobile": "cd mobile && npm start",
+    "backend:prod": "cd backend && npm start",
+    "migrate": "cd backend && npm run migrate",
+    "seed": "cd backend && npm run seed",
+    "setup": "npm run install:all && npm run migrate && npm run seed"
+  },
+  "keywords": [
+    "uv",
+    "aqi",
+    "air-quality",
+    "monitoring",
+    "encarnacion",
+    "paraguay"
+  ],
+  "author": "",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": ""
+  }
+}
